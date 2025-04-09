@@ -12,7 +12,7 @@ const introdata = {
         third: "I'm just trying.......",
     },
     description: "I'm a passionate front-end developer crafting modern and cosmic web experiences. Always learning, always building.",
-    your_img_url: "https://images.unsplash.com/photo-1514790193030-c89d266d5a9d",
+    your_img_url: "/public/moon.png",
 };
 
 const dataabout = {
