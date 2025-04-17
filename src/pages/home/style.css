@@ -7,6 +7,54 @@ section {
     transition: all .5s ease-in;
 }
 
+.home-flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-text {
+  width: 100%;
+  padding: 20px;
+}
+
+.home-globe {
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+}
+
+.home-globe canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Desktop responsive */
+@media (min-width: 992px) {
+  .home-flex-container {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    height: 100vh;
+  }
+
+  .home-text {
+    width: 50%;
+    padding: 60px;
+    display: flex;
+    align-items: center;
+  }
+
+  .home-globe {
+    width: 50%;
+    height: 100vh;
+  }
+}
+
+
+
+
 .who_am_I {
     font-family: Cinzel;
 }

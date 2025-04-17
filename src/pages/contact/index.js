@@ -6,6 +6,9 @@ import { meta } from "../../content_option";
 import { Container, Row, Col, Alert } from "react-bootstrap";
 import { contactConfig } from "../../content_option";
 
+// 👉 Firebase Auth import
+import { auth, provider, signInWithPopup } from "../../firebaseConfig";
+
 export const ContactUs = () => {
   const [formData, setFormdata] = useState({
     email: "",
@@ -17,18 +20,41 @@ export const ContactUs = () => {
     variant: "",
   });
 
+  const [verifiedUser, setVerifiedUser] = useState(null);
+
+  // 👉 Google Sign-In Handler
+  const handleGoogleSignIn = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const email = result.user.email;
+        if (email.endsWith("@gmail.com")) {
+          setVerifiedUser(email);
+          alert(`Signed in as: ${email}`);
+        } else {
+          alert("Only Gmail users are allowed.");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFormdata({ ...formData, loading: true });
 
+    if (!verifiedUser) {
+      alert("Please sign in with Google before sending a message.");
+      return;
+    }
+
+    setFormdata({ ...formData, loading: true });
 
     const templateParams = {
       from_name: formData.email,
       user_name: formData.name,
-      to_name: contactConfig.YOUR_EMAIL, // Fix yaha
+      to_name: contactConfig.YOUR_EMAIL,
       message: formData.message,
     };
-    ;
 
     emailjs
       .send(
@@ -43,7 +69,7 @@ export const ContactUs = () => {
           setFormdata({
             ...formData,
             loading: false,
-            alertmessage: "SUCCESS! ,Thankyou for your message",
+            alertmessage: "SUCCESS! Thank you for your message",
             variant: "success",
             show: true,
           });
@@ -53,8 +79,8 @@ export const ContactUs = () => {
           setFormdata({
             ...formData,
             loading: false,
-            alertmessage: "SUCCESS! ,Thankyou for your message",
-            variant: "success",
+            alertmessage: "Failed to send message. Try again later.",
+            variant: "danger",
             show: true,
           });
           document.getElementsByClassName("co_alert")[0].scrollIntoView();
@@ -86,17 +112,15 @@ export const ContactUs = () => {
         <Row className="sec_sp">
           <Col lg="12">
             <Alert
-              //show={formData.show}
               variant={formData.variant}
-              className={`rounded-0 co_alert ${formData.show ? "d-block" : "d-none"
-                }`}
+              className={`rounded-0 co_alert ${formData.show ? "d-block" : "d-none"}`}
               onClose={() => setFormdata({ ...formData, show: false })}
-
               dismissible
             >
               <p className="my-0">{formData.alertmessage}</p>
             </Alert>
           </Col>
+
           <Col lg="5" className="mb-5">
             <h3 className="color_sec py-4">Get in touch</h3>
             <address>
@@ -116,7 +140,14 @@ export const ContactUs = () => {
             </address>
             <p>{contactConfig.description}</p>
           </Col>
-          <Col lg="7" className="d-flex align-items-center">
+
+          <Col lg="7" className="d-flex flex-column align-items-start">
+            {/* 👉 Google Sign-In Button */}
+            <button onClick={handleGoogleSignIn} className="btn btn-primary mb-3">
+              {verifiedUser ? `Signed in as: ${verifiedUser}` : "Sign in with Google to Contact"}
+            </button>
+
+            {/* 👉 Contact Form */}
             <form onSubmit={handleSubmit} className="contact__form w-100">
               <Row>
                 <Col lg="6" className="form-group">
@@ -129,6 +160,7 @@ export const ContactUs = () => {
                     type="text"
                     required
                     onChange={handleChange}
+                    disabled={!verifiedUser}
                   />
                 </Col>
                 <Col lg="6" className="form-group">
@@ -141,6 +173,7 @@ export const ContactUs = () => {
                     value={formData.email || ""}
                     required
                     onChange={handleChange}
+                    disabled={!verifiedUser}
                   />
                 </Col>
               </Row>
@@ -153,11 +186,12 @@ export const ContactUs = () => {
                 value={formData.message}
                 onChange={handleChange}
                 required
+                disabled={!verifiedUser}
               ></textarea>
               <br />
               <Row>
                 <Col lg="12" className="form-group">
-                  <button className="btn ac_btn" type="submit">
+                  <button className="btn ac_btn" type="submit" disabled={!verifiedUser}>
                     {formData.loading ? "Sending..." : "Send"}
                   </button>
                 </Col>
