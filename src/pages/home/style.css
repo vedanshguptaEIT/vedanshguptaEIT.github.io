@@ -6,6 +6,15 @@ section {
     -o-transition: all .5s ease-in;
     transition: all .5s ease-in;
 }
+.home-globe {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
 
 .home-flex-container {
   display: flex;
