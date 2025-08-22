@@ -71,12 +71,13 @@ export const Home = () => {
                   </div>
                 </Link>
                 <a
-                  href="/resumeved.pdf"
+                  href="/ResumeVedanshGUpta.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text_2"
                 >
                   <div id="button_p" className="ac_btn btn">
+                    
                     Resume
                     <div className="ring one"></div>
                     <div className="ring two"></div>
