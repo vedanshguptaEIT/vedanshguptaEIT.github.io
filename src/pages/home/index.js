@@ -71,7 +71,7 @@ export const Home = () => {
                   </div>
                 </Link>
                 <a
-                  href="/ResumeVedanshGUpta.pdf"
+                  href="/ResumeVedanshGupta.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text_2"
