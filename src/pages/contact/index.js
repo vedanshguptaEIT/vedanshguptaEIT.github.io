@@ -6,8 +6,9 @@ import { meta } from "../../content_option";
 import { Container, Row, Col, Alert } from "react-bootstrap";
 import { contactConfig } from "../../content_option";
 
-// 👉 Firebase Auth import
-import { auth, provider, signInWithPopup } from "../../firebaseConfig";
+// Firebase imports
+import { auth, provider } from "../../firebaseConfig";
+import { signInWithPopup } from "firebase/auth";
 
 export const ContactUs = () => {
   const [formData, setFormdata] = useState({
@@ -22,20 +23,46 @@ export const ContactUs = () => {
 
   const [verifiedUser, setVerifiedUser] = useState(null);
 
-  // 👉 Google Sign-In Handler
+  // Google Sign-In Handler
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        const email = result.user.email;
+        const user = result.user;
+        const email = user.email;
+
         if (email.endsWith("@gmail.com")) {
           setVerifiedUser(email);
-          alert(`Signed in as: ${email}`);
+
+          // Autofill email and name
+          setFormdata({
+            ...formData,
+            email: email,
+            name: user.displayName || "",
+          });
+
+          setFormdata((prev) => ({
+            ...prev,
+            show: true,
+            alertmessage: `Signed in as: ${email}`,
+            variant: "success",
+          }));
         } else {
-          alert("Only Gmail users are allowed.");
+          setFormdata((prev) => ({
+            ...prev,
+            show: true,
+            alertmessage: "Only Gmail users are allowed.",
+            variant: "danger",
+          }));
         }
       })
       .catch((error) => {
         console.error(error);
+        setFormdata((prev) => ({
+          ...prev,
+          show: true,
+          alertmessage: "Google Sign-In failed. Try again.",
+          variant: "danger",
+        }));
       });
   };
 
@@ -43,7 +70,12 @@ export const ContactUs = () => {
     e.preventDefault();
 
     if (!verifiedUser) {
-      alert("Please sign in with Google before sending a message.");
+      setFormdata((prev) => ({
+        ...prev,
+        show: true,
+        alertmessage: "Please sign in with Google before sending a message.",
+        variant: "warning",
+      }));
       return;
     }
 
@@ -65,25 +97,24 @@ export const ContactUs = () => {
       )
       .then(
         (result) => {
-          console.log(result.text);
           setFormdata({
             ...formData,
             loading: false,
+            message: "",
+            show: true,
             alertmessage: "SUCCESS! Thank you for your message",
             variant: "success",
-            show: true,
           });
         },
         (error) => {
-          console.log(error.text);
+          console.error(error.text);
           setFormdata({
             ...formData,
             loading: false,
+            show: true,
             alertmessage: "Failed to send message. Try again later.",
             variant: "danger",
-            show: true,
           });
-          document.getElementsByClassName("co_alert")[0].scrollIntoView();
         }
       );
   };
@@ -103,12 +134,14 @@ export const ContactUs = () => {
           <title>{meta.title} | Contact</title>
           <meta name="description" content={meta.description} />
         </Helmet>
+
         <Row className="mb-5 mt-3 pt-md-3">
           <Col lg="8">
             <h1 className="display-4 mb-4">Contact Me</h1>
             <hr className="t_border my-4 ml-0 text-left" />
           </Col>
         </Row>
+
         <Row className="sec_sp">
           <Col lg="12">
             <Alert
@@ -125,29 +158,25 @@ export const ContactUs = () => {
             <h3 className="color_sec py-4">Get in touch</h3>
             <address>
               <strong>Email:</strong>{" "}
-              <a href={`mailto:${contactConfig.YOUR_EMAIL}`}>
-                {contactConfig.YOUR_EMAIL}
-              </a>
+              <a href={`mailto:${contactConfig.YOUR_EMAIL}`}>{contactConfig.YOUR_EMAIL}</a>
               <br />
               <br />
-              {contactConfig.hasOwnProperty("YOUR_FONE") ? (
+              {contactConfig.hasOwnProperty("YOUR_FONE") && (
                 <p>
                   <strong>Phone:</strong> {contactConfig.YOUR_FONE}
                 </p>
-              ) : (
-                ""
               )}
             </address>
             <p>{contactConfig.description}</p>
           </Col>
 
           <Col lg="7" className="d-flex flex-column align-items-start">
-            {/* 👉 Google Sign-In Button */}
+            {/* Google Sign-In Button */}
             <button onClick={handleGoogleSignIn} className="btn btn-primary mb-3">
               {verifiedUser ? `Signed in as: ${verifiedUser}` : "Sign in with Google to Contact"}
             </button>
 
-            {/* 👉 Contact Form */}
+            {/* Contact Form */}
             <form onSubmit={handleSubmit} className="contact__form w-100">
               <Row>
                 <Col lg="6" className="form-group">
@@ -173,7 +202,7 @@ export const ContactUs = () => {
                     value={formData.email || ""}
                     required
                     onChange={handleChange}
-                    disabled={!verifiedUser}
+                    disabled
                   />
                 </Col>
               </Row>
