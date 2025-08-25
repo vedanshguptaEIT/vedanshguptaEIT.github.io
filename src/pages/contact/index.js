@@ -8,7 +8,7 @@ import { contactConfig } from "../../content_option";
 
 // Firebase imports
 import { auth, provider } from "../../firebaseConfig";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, signOut } from "firebase/auth";
 
 export const ContactUs = () => {
   const [formData, setFormdata] = useState({
@@ -31,7 +31,7 @@ export const ContactUs = () => {
         const email = user.email;
 
         if (email.endsWith("@gmail.com")) {
-          setVerifiedUser(email);
+          setVerifiedUser(user);
 
           // Autofill email and name
           setFormdata({
@@ -61,6 +61,32 @@ export const ContactUs = () => {
           ...prev,
           show: true,
           alertmessage: "Google Sign-In failed. Try again.",
+          variant: "danger",
+        }));
+      });
+  };
+
+  // Google Sign-Out Handler
+  const handleGoogleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        setVerifiedUser(null);
+        setFormdata({
+          email: "",
+          name: "",
+          message: "",
+          loading: false,
+          show: true,
+          alertmessage: "Signed out successfully.",
+          variant: "info",
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        setFormdata((prev) => ({
+          ...prev,
+          show: true,
+          alertmessage: "Error signing out. Try again.",
           variant: "danger",
         }));
       });
@@ -171,10 +197,19 @@ export const ContactUs = () => {
           </Col>
 
           <Col lg="7" className="d-flex flex-column align-items-start">
-            {/* Google Sign-In Button */}
-            <button onClick={handleGoogleSignIn} className="btn btn-primary mb-3">
-              {verifiedUser ? `Signed in as: ${verifiedUser}` : "Sign in with Google to Contact"}
-            </button>
+            {/* Google Sign-In / Sign-Out Buttons */}
+            {!verifiedUser ? (
+              <button onClick={handleGoogleSignIn} className="btn btn-primary mb-3">
+                Sign in with Google to Contact
+              </button>
+            ) : (
+              <>
+                <p className="mb-2">Signed in as: {verifiedUser.email}</p>
+                <button onClick={handleGoogleSignOut} className="btn btn-danger mb-3">
+                  Sign Out
+                </button>
+              </>
+            )}
 
             {/* Contact Form */}
             <form onSubmit={handleSubmit} className="contact__form w-100">

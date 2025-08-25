@@ -12,8 +12,7 @@ const introdata = {
         third: "I'm just trying.......",
     },
     description: "I'm a passionate front-end developer crafting modern and cosmic web experiences. Always learning, always building.",
-    your_img_url: "https://i.pinimg.com/736x/c8/16/c9/c816c9ee2bb9f10f7e2045399f0b1164.jpg",
-};
+    };
 
 const dataabout = {
     title: "A bit about my self",
@@ -83,9 +82,9 @@ const dataportfolio = [{
     link: "https://github.com/Thevedanshgupta/itsolutionwebsite",
 },
 {
-    img: "https://picsum.photos/400/300/?grayscale",
-    description: " Adding Soon..",
-    link: "",
+    img: "https://picsum.photos/400/700/?grayscale",
+    description: " Smart Wishlist App",
+    link: "#",
 },
 // {
 //     img: "https://picsum.photos/400/700/?grayscale",

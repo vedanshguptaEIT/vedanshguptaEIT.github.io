@@ -1,52 +1,58 @@
 {
-    "name": "react-portfolio",
-    "version": "0.1.0",
-    "private": true,
-    "dependencies": {
-        "@emailjs/browser": "^4.4.1",
-        "bootstrap": "^5.2.3",
-        "emailjs-com": "^3.2.0",
-        "firebase": "^11.10.0",
-        "react": "^18.2.0",
-        "react-bootstrap": "^2.7.0",
-        "react-dom": "^18.2.0",
-        "react-globe.gl": "^2.33.2",
-        "react-helmet-async": "^1.0.7",
-        "react-icons": "^4.1.0",
-        "react-router-dom": "^6.6.2",
-        "react-scripts": "^5.0.1",
-        "react-transition-group": "^4.4.2",
-        "three": "^0.175.0",
-        "typewriter-effect": "^2.18.2",
-        "web-vitals": "^3.1.1"
-    },
-    "homepage": "https://vedanshgupta.me",
-    "scripts": {
-        "predeploy": "yarn build",
-        "deploy": "gh-pages -d build",
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "open": "start  https://vedanshgupta.me"
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "devDependencies": {
-        "gh-pages": "^6.3.0"
-    }
+  "name": "react-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emailjs/browser": "^4.4.1",
+    "bootstrap": "^5.2.3",
+    "emailjs-com": "^3.2.0",
+    "firebase": "^11.10.0",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.7.0",
+    "react-dom": "^18.2.0",
+    "react-globe.gl": "^2.33.2",
+    "react-helmet-async": "^1.0.7",
+    "react-icons": "^4.1.0",
+    "react-router-dom": "^6.6.2",
+    "react-scripts": "^5.0.1",
+    "react-transition-group": "^4.4.2",
+    "three": "^0.175.0",
+    "typewriter-effect": "^2.18.2",
+    "web-vitals": "^3.1.1"
+  },
+  "homepage": "https://vedanshgupta.me",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vedanshguptaEIT/vedanshguptaEIT.github.io.git"
+  },
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build -r https://github.com/vedanshguptaEIT/vedanshguptaEIT.github.io.git",
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.5",
+    "gh-pages": "^6.3.0",
+    "semver": "^7.7.2"
+  }
 }
